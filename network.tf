@@ -100,21 +100,27 @@ resource "aws_subnet" "public3" {
 }
 
 #create EIP
-resource "aws_eip" "utc-eip" {
+resource "aws_eip" "utc-eip-1" {
+}
+
+resource "aws_eip" "utc-eip-2" {
+}
+
+resource "aws_eip" "utc-eip-3" {
 }
 
 #create NAT gateway
 resource "aws_nat_gateway" "NAT1" {
-  allocation_id = aws_eip.utc-eip.id
+  allocation_id = aws_eip.utc-eip-1.id
   subnet_id     = aws_subnet.public1.id
 }
 resource "aws_nat_gateway" "NAT2" {
-  allocation_id = aws_eip.utc-eip.id
+  allocation_id = aws_eip.utc-eip-2.id
   subnet_id     = aws_subnet.public2.id
   
 }
 resource "aws_nat_gateway" "NAT3" {
-  allocation_id = aws_eip.utc-eip.id
+  allocation_id = aws_eip.utc-eip-3.id
   subnet_id     = aws_subnet.public3.id
 }
 
