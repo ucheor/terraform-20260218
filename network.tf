@@ -108,14 +108,14 @@ resource "aws_nat_gateway" "NAT1" {
   allocation_id = aws_eip.utc-eip.id
   subnet_id     = aws_subnet.private1.id
 
-  depends_on = [aws_internet_gateway.example]
+  #depends_on = [aws_internet_gateway.example]
 }
 #create NAT gateway
 resource "aws_nat_gateway" "NAT2" {
   allocation_id = aws_eip.utc-eip.id
   subnet_id     = aws_subnet.private2.id
 
-  depends_on = [aws_internet_gateway.example]
+  #depends_on = [aws_internet_gateway.example]
 }
 
  #create iGW
