@@ -7,29 +7,23 @@ resource "aws_instance" "bastion_host" {
   key_name               = aws_key_pair.utc_key.key_name
   associate_public_ip_address = true
 
+  # This tells Terraform how to connect to the instance to run the provisioner
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = tls_private_key.utc_key.private_key_pem
+    host        = self.public_ip
+  }
+
   provisioner "file" {
     content     = tls_private_key.utc_key.private_key_pem
-    destination = "/home/ubuntu/utc_key.pem"
-
-    connection {
-      type        = "ssh"
-      host        = self.public_ip
-      user        = "ubuntu"
-      private_key = file("~/.ssh/id_rsa")  # your local key to access the bastion
-    }
+    destination = "/home/ubuntu/${aws_key_pair.utc_key.key_name}.pem"
   }
 
   provisioner "remote-exec" {
     inline = [
-      "chmod 600 /home/ubuntu/utc_key.pem"
+      "chmod 400 /home/ubuntu/${aws_key_pair.utc_key.key_name}.pem"
     ]
-
-    connection {
-      type        = "ssh"
-      host        = self.public_ip
-      user        = "ubuntu"
-      private_key = file("~/.ssh/id_rsa")
-    }
   }
 
   tags = {
