@@ -22,7 +22,8 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
 
       - run: terraform init        
-      - run: terraform apply -auto-approve
+      #- run: terraform apply -auto-approve
+      - run: terraform apply -replace="aws_instance.bastion_host
 
       - name: Upload Private Key
         uses: actions/upload-artifact@v4
