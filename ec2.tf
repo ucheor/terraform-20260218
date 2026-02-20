@@ -6,6 +6,7 @@ resource "aws_instance" "bastion_host" {
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
   key_name               = aws_key_pair.utc_key.key_name
   associate_public_ip_address = true
+  depends_on = [ local_file.github_key ]
 
   # This tells Terraform how to connect to the instance to run the provisioner
   connection {
