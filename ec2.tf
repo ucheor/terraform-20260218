@@ -20,8 +20,10 @@ resource "aws_instance" "app-server-1" {
   subnet_id              = aws_subnet.private1.id
   vpc_security_group_ids = [ aws_security_group.app_server_sg.id ]
   key_name               = aws_key_pair.utc_key.key_name
-  associate_public_ip_address = true
-  availability_zone = "us-east-1a"
+  
+
+  user_data = file("user_data.sh")
+
   tags = {
     Name = "dev-app-server-host-1"
     env  = "dev"
@@ -35,8 +37,9 @@ resource "aws_instance" "app-server-2" {
   subnet_id              = aws_subnet.private1.id
   vpc_security_group_ids = [ aws_security_group.app_server_sg.id ]
   key_name               = aws_key_pair.utc_key.key_name
-  associate_public_ip_address = true
-  availability_zone = "us-east-1b"
+  
+  user_data = file("user_data.sh")
+
   tags = {
     Name = "dev-app-server-host-2"
     env  = "dev"
