@@ -7,12 +7,39 @@ resource "aws_instance" "bastion_host" {
   key_name               = aws_key_pair.utc_key.key_name
   associate_public_ip_address = true
 
+  provisioner "file" {
+    content     = tls_private_key.utc_key.private_key_pem
+    destination = "/home/ubuntu/utc_key.pem"
+
+    connection {
+      type        = "ssh"
+      host        = self.public_ip
+      user        = "ubuntu"
+      private_key = file("~/.ssh/id_rsa")  # your local key to access the bastion
+    }
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod 600 /home/ubuntu/utc_key.pem"
+    ]
+
+    connection {
+      type        = "ssh"
+      host        = self.public_ip
+      user        = "ubuntu"
+      private_key = file("~/.ssh/id_rsa")
+    }
+  }
+
   tags = {
     Name = "dev-bastion-host"
     env  = "dev"
     team = "config management"
   }
 }
+
+
 
 resource "aws_instance" "app-server-1" {
   ami                    = "ami-0b6c6ebed2801a5cb"
