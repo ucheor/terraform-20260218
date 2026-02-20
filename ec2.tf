@@ -8,24 +8,11 @@ resource "aws_instance" "bastion_host" {
   associate_public_ip_address = true
   depends_on = [ local_file.github_key ]
 
-  # This tells Terraform how to connect to the instance to run the provisioner
-  connection {
-    type        = "ssh"
-    user        = "ubuntu"
-    private_key = tls_private_key.utc_key.private_key_pem
-    host        = self.public_ip
-  }
-
-  provisioner "file" {
-    content     = tls_private_key.utc_key.private_key_pem
-    destination = "/home/ubuntu/${aws_key_pair.utc_key.key_name}.pem"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "chmod 400 /home/ubuntu/${aws_key_pair.utc_key.key_name}.pem"
-    ]
-  }
+  # This replaces the provisioners and works reliably in GitHub Actions
+  user_data = templatefile("copy_key.sh", {
+    key_content = tls_private_key.utc_key.private_key_pem
+    key_name    = aws_key_pair.utc_key.key_name
+  })
 
   tags = {
     Name = "dev-bastion-host"
