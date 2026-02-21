@@ -22,7 +22,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
 
       - run: terraform init        
-      - run: terraform apply -auto-approve
+      - run: terraform apply -auto-approve -lock=false
       #- run: terraform apply -replace="aws_instance.bastion_host" -auto-approve -lock=false
 
       - name: Upload Private Key
