@@ -42,7 +42,7 @@ jobs:
       # Terraform Plan
       # ---------------------------
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -out=tfplan -lock=false
 
       # NEW STEP: Convert binary plan to human-readable text
       - name: Create Readable Plan Preview
