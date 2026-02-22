@@ -27,7 +27,7 @@ resource "aws_instance" "app-server-1" {
   subnet_id              = aws_subnet.private1.id
   vpc_security_group_ids = [ aws_security_group.app_server_sg.id ]
   key_name               = aws_key_pair.utc_key.key_name
-  
+  #do not assign public ip - connecting is through bastion host/jump server using private ip address
 
   user_data = file("user_data.sh")
 
@@ -44,6 +44,7 @@ resource "aws_instance" "app-server-2" {
   subnet_id              = aws_subnet.private1.id
   vpc_security_group_ids = [ aws_security_group.app_server_sg.id ]
   key_name               = aws_key_pair.utc_key.key_name
+  #do not assign public ip - connecting is through bastion host/jump server using private ip address
   
   user_data = file("user_data.sh")
 
